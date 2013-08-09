@@ -1,0 +1,43 @@
+body {
+  background-color: black;
+}
+
+#hack-area {
+	height: 100%;
+	width: 100%;
+  color: #00FF00;
+}
+
+#dropzone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 4px dashed #DFDFDF;
+  background-color: rgba(139, 139, 139, 0.75);
+  margin: 20px;
+}
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none;
+}
+
+#settings-overlay {
+  position: absolute;
+  background-color: rgba(255,255,255,0.85);
+  z-index: 1000;
+  padding-left: 7%;
+  padding-right: 7%;
+  padding-bottom: 30px;
+  left: 0;
+  right: 0;
+  top: 0;
+  -webkit-transition: opacity 0.35s ease-in-out;
+  -moz-transition: opacity 0.35s ease-in-out;
+  -o-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+
+#settings-overlay.hide {
+  opacity: 0;
+}
