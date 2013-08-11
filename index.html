@@ -5,25 +5,24 @@
     <link rel="stylesheet" href="./styles/style.css">
   </head>
   <body ng-controller="HackCtrl">
-    <div id="hack-area" ng-cloak hackeypress shortcut>
-      {{currentOut}}<span ng-show="cursorOn">|</span>
-    </div>
+    <pre id="hack-area" ng-cloak hackeypress shortcut>{{currentOut}}<span ng-show="cursorOn">|</span></pre>
     <div id="settings-overlay" ng-cloak ng-class="{'hide': !showSettings}">
-      <h1>About HackItFast.com</h1>
+      <h1>HackItFast.com</h1>
+      <h2>About</h2>
+      <h2>Settings</h2>
     </div>
     <!-- <div id="dropzone"></div> -->
-    <script src="https://cdn.firebase.com/v0/firebase.js" data-local-src="./vendor/firebase.js" data-prop-name="Firebase"></script>
+    <!-- <script src="https://cdn.firebase.com/v0/firebase.js" data-local-src="./vendor/firebase.js" data-prop-name="Firebase"></script> -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" data-prop-name="angular" data-local-src="./vendor/angular.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js" data-local-src="./vendor/jquery.js" data-prop-name="jQuery"></script>
     <script src="./vendor/dt-script-loader.min.js"></script>
-    <script src="./vendor/angularfire.js"></script>
+    <!-- <script src="./vendor/angularfire.js"></script> -->
 
     <script src="./scripts/other.js"></script>
     
     <script src="./scripts/app.js"></script>
-
     <script src="./scripts/controllers/HackCtrl.js"></script>
-
     <script src="./scripts/directives/hackeypress.js"></script>
+    <script src="./scripts/factories/Gist.js"></script>
   </body>
 </html>
