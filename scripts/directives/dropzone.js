@@ -1,4 +1,4 @@
-angular.module('hif').directive('dropzone', function() {
+angular.module('iwpm').directive('dropzone', function() {
   return {
     restrict : 'A',
     link: function (scope, elem) {

@@ -1,4 +1,4 @@
-angular.module('hif').directive('hackeypress', function($document) {
+angular.module('iwpm').directive('iwpmKeypress', function($document) {
   var keys = {
     backspace: 8
   }

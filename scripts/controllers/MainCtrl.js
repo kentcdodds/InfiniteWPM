@@ -1,4 +1,4 @@
-angular.module('hif').controller('HackCtrl', function($scope, $location, Gist, $timeout) {
+angular.module('iwpm').controller('MainCtrl', function($scope, $location, Gist, $timeout) {
   
   var cursorGo = (function() {
     var timeout;
@@ -19,7 +19,7 @@ angular.module('hif').controller('HackCtrl', function($scope, $location, Gist, $
       scope.allText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dapibus tortor lorem, nec faucibus augue tristique ac. Nulla facilisi. Suspendisse potenti. Etiam mattis orci tempor, suscipit lacus eget, rhoncus ante. Quisque condimentum ipsum ac nunc dictum hendrerit. Sed ultricies volutpat ligula, vitae eleifend sapien pulvinar non. Aenean fringilla nec turpis eget commodo. Phasellus mattis fermentum lorem sit amet congue. Phasellus fermentum massa neque, ac volutpat urna pretium ut.";
       scope.upcomingText = scope.allText;
       scope.charsPerPress = 3;
-      scope.showSettings = false;
+      scope.showSettings = true;
       scope.cursorOn = true;
       scope.repeatText = true;
     },

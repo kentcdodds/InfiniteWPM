@@ -1,6 +1,6 @@
 'use strict';
 (function() {
-  var app = angular.module('hif');
+  var app = angular.module('iwpm');
   
   app.factory('Gist', function($http, $rootScope) {
     var listUrl = 'https://api.github.com/gists/';
