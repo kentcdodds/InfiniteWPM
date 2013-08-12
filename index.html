@@ -5,14 +5,18 @@
     <link rel="stylesheet" href="./styles/style.css">
   </head>
   <body ng-controller="MainCtrl">
-    <pre id="hack-area" ng-cloak iwpm-keypress>{{currentOut}}<span ng-show="cursorOn">|</span></pre>
-    <div id="settings-overlay" ng-cloak ng-class="{'hide': !showSettings}">
+    <pre id="hack-area" ng-cloak iwpm-keypress>{{currentText}}<span ng-show="cursorOn">|</span></pre>
+    <div id="settings-overlay" class="overlay" ng-cloak ng-class="{'hide': !showSettings}">
       <h1>InfiniteWPM.com</h1>
       <p>Press '?' to close/open this menu.</p>
       <h2>About</h2>
       <p>We're under construction. Contact <a href="mailto:kent+dev@doddsfamily.us">Kent</a> with any questions.</p>
       <h2>Settings</h2>
       <p>Just wait for all kinds of cool stuff. For now, if you want custom text, try <a href="#/?gist=2980444">this</a> and change the gist number to the id of another gist.</p>
+    </div>
+    <div id="hint-overlay" class="overlay" ng-class="{'hide': !showHint}">
+      <h1>Welcome to InfiniteWPM.com</h1>
+      <h2>Press '?' for settings...</h2>
     </div>
     <!-- <div id="dropzone"></div> -->
     <!-- <script src="https://cdn.firebase.com/v0/firebase.js" data-local-src="./vendor/firebase.js" data-prop-name="Firebase"></script> -->

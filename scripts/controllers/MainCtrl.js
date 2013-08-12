@@ -15,11 +15,12 @@ angular.module('iwpm').controller('MainCtrl', function($scope, $location, Gist, 
   
   var setup = {
     defaults: function(scope) {
-      scope.currentOut = "";
-      scope.allText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dapibus tortor lorem, nec faucibus augue tristique ac. Nulla facilisi. Suspendisse potenti. Etiam mattis orci tempor, suscipit lacus eget, rhoncus ante. Quisque condimentum ipsum ac nunc dictum hendrerit. Sed ultricies volutpat ligula, vitae eleifend sapien pulvinar non. Aenean fringilla nec turpis eget commodo. Phasellus mattis fermentum lorem sit amet congue. Phasellus fermentum massa neque, ac volutpat urna pretium ut.";
+      scope.currentText = '';
+      scope.allText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dapibus tortor lorem, nec faucibus augue tristique ac. Nulla facilisi. Suspendisse potenti. Etiam mattis orci tempor, suscipit lacus eget, rhoncus ante. Quisque condimentum ipsum ac nunc dictum hendrerit. Sed ultricies volutpat ligula, vitae eleifend sapien pulvinar non. Aenean fringilla nec turpis eget commodo. Phasellus mattis fermentum lorem sit amet congue. Phasellus fermentum massa neque, ac volutpat urna pretium ut.';
       scope.upcomingText = scope.allText;
       scope.charsPerPress = 3;
-      scope.showSettings = true;
+      scope.showSettings = false;
+      scope.showHint = true;
       scope.cursorOn = true;
       scope.repeatText = true;
     },
@@ -43,11 +44,11 @@ angular.module('iwpm').controller('MainCtrl', function($scope, $location, Gist, 
           if (!canType()) {
             return;
           }
-          var end = scope.currentOut.length;
+          var end = scope.currentText.length;
           var start = end - scope.charsPerPress;
-          var removedOutput = scope.currentOut.substring(start, end);
-          scope.currentOut = scope.currentOut.substring(0, start);
-          scope.upcomingText += removedOutput;
+          var removedOutput = scope.currentText.substring(start, end);
+          scope.currentText = scope.currentText.substring(0, start);
+          scope.upcomingText = removedOutput + scope.upcomingText;
           event.preventDefault();
         };
 
@@ -60,7 +61,7 @@ angular.module('iwpm').controller('MainCtrl', function($scope, $location, Gist, 
           }
           var newOutput = scope.upcomingText.substring(0, scope.charsPerPress);
           scope.upcomingText = scope.upcomingText.substring(scope.charsPerPress);
-          scope.currentOut += newOutput;
+          scope.currentText += newOutput;
         };
 
         keyPressed[charCode('?')] = function() {
@@ -99,8 +100,12 @@ angular.module('iwpm').controller('MainCtrl', function($scope, $location, Gist, 
         '/settings': function() {
           scope.showSettings = true;
         },
+        '/hint': function() {
+          scope.showHint = true;
+        },
         '/': function() {
           scope.showSettings = false;
+          scope.showHint = false;
         }
       };
       var queryParams = {
@@ -119,12 +124,6 @@ angular.module('iwpm').controller('MainCtrl', function($scope, $location, Gist, 
         var path = $location.path();
         if (locations[path]) {
           locations[path]();
-        } else if (/gist/g.test(path)) {
-          var gistId = path.substring(path.lastIndexOf('/') + 1, path.length);
-          Gist.getContent(gistId, function(content) {
-            scope.upcomingText = content;
-            scope.currentText = '';
-          });
         }
       });
       scope.$watch(function() {
@@ -139,7 +138,14 @@ angular.module('iwpm').controller('MainCtrl', function($scope, $location, Gist, 
         });
       });
     },
+    fadeHint: function() {
+      $location.path('/hint');
+      $timeout(function() {
+        $location.path('/');
+      }, 500);
+    },
     go: function(scope) {
+      this.fadeHint();
       this.keyEvents(scope);
       this.defaults(scope);
       this.location(scope);
