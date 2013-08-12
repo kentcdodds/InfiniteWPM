@@ -1,7 +1,7 @@
 'use strict';
 (function() {
   var app = angular.module('iwpm');
-  
+
   app.controller('MainCtrl', function($scope, defaultText, $location, TextSources, $timeout) {
     
     var cursorGo = (function() {
@@ -112,25 +112,42 @@
             scope.showHint = false;
           }
         };
-        var resetContent = function(type, id) {
-          var file = $location.search().file;
-          TextSources.getContent({
-            type: type,
-            id: id,
-            file: file,
+        var resetContent = function(options) {
+          TextSources.getContent(angular.extend({
             callback: function(content) {
               scope.allText = content;
               scope.upcomingText = content;
               scope.currentText = '';
             }
-          });
+          }, options));
         }
         var queryParams = {
           gist: function(id) {
-            resetContent('gist', id);
+            var file = $location.search().file;
+            resetContent({
+              type: 'gist',
+              id: id,
+              file: file
+            });
           },
           pastebin: function(id) {
-            resetContent('pastebin', id);
+            resetContent({
+              type: 'pastebin',
+              id: id
+            });
+          },
+          github: function(id) {
+            var repo = $location.search().repo;
+            var owner = $location.search().owner;
+            if (!repo || !owner) {
+              return; //Can't get anything...
+            }
+            resetContent({
+              type: 'github',
+              repo: repo,
+              owner: owner,
+              path: id
+            });
           }
         };
         scope.$watch(function() {

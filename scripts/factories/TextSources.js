@@ -21,6 +21,12 @@
       pastebin: function(options, callback) {
         var url = 'http://pastebin.com/raw.php?i=' + options.id;
         sendRequest(url, callback);
+      },
+      github: function(options) {
+        var url = 'https://api.github.com/repos/' + options.owner + '/' + options.repo + '/contents' + options.path;
+        sendRequest(url, function(data) {
+          callback(atob(data.content));
+        });
       }
     };
 
