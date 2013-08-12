@@ -5,7 +5,13 @@
     <link rel="stylesheet" href="./styles/style.css">
   </head>
   <body ng-controller="MainCtrl">
-    <pre id="hack-area" ng-cloak iwpm-keypress>{{currentText}}<span ng-show="cursorOn">|</span></pre>
+    <pre
+      id="hack-area"
+      ng-cloak
+      iwpm-keypress
+      scroll-glue
+      ng-model="currentText">{{currentText}}<span ng-show="cursorOn">|</span>
+    </pre>
     <div id="settings-overlay" class="overlay" ng-cloak ng-class="{'hide': !showSettings}">
       <h1>InfiniteWPM.com</h1>
       <p>Press '?' to close/open this menu.</p>
@@ -28,8 +34,10 @@
     <script src="./scripts/other.js"></script>
     
     <script src="./scripts/app.js"></script>
+    <script src="./scripts/values/defaultText.js"></script>
     <script src="./scripts/controllers/MainCtrl.js"></script>
     <script src="./scripts/directives/iwpmKeypress.js"></script>
-    <script src="./scripts/factories/Gist.js"></script>
+    <script src="./scripts/directives/scrollGlue.js"></script>
+    <script src="./scripts/factories/TextSources.js"></script>
   </body>
 </html>
