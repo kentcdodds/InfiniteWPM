@@ -27,6 +27,7 @@
         scope.showHint = true;
         scope.cursorOn = true;
         scope.repeatText = true;
+        scope.showDropzone = true;
       },
       keyEvents: function(scope) {
         var wildcard = '*';
@@ -60,7 +61,7 @@
             if (!canType()) {
               return;
             }
-            if (scope.upcomingText.length < scope.charsPerPress) {
+            if (scope.repeatText && scope.upcomingText.length < scope.charsPerPress) {
               scope.upcomingText += scope.allText;
             }
             var newOutput = scope.upcomingText.substring(0, scope.charsPerPress);
@@ -68,12 +69,13 @@
             scope.currentText += newOutput;
           };
 
-          keyPressed[charCode('?')] = function() {
+          keyPressed[charCode('?')] = function(event) {
             if (scope.showSettings) {
               $location.path('/');
             } else {
               $location.path('/settings');
             }
+            event.preventDefault();
           };
 
           return {
@@ -99,6 +101,10 @@
           executeKey(event, keys.keyDown);
         };
       },
+      dropEvents: function(scope) {
+        var $dropArea = $('#dropzone');
+
+      },
       location: function(scope) {
         var locations = {
           '/settings': function() {
@@ -110,6 +116,7 @@
           '/': function() {
             scope.showSettings = false;
             scope.showHint = false;
+            document.activeElement.blur();
           }
         };
         var resetContent = function(options) {
@@ -122,21 +129,15 @@
           }, options));
         }
         var queryParams = {
-          gist: function(id) {
+          gist: function(value) {
             var file = $location.search().file;
             resetContent({
               type: 'gist',
-              id: id,
+              id: value,
               file: file
             });
           },
-          pastebin: function(id) {
-            resetContent({
-              type: 'pastebin',
-              id: id
-            });
-          },
-          github: function(id) {
+          github: function(value) {
             var repo = $location.search().repo;
             var owner = $location.search().owner;
             if (!repo || !owner) {
@@ -146,7 +147,15 @@
               type: 'github',
               repo: repo,
               owner: owner,
-              path: id
+              path: value
+            });
+          },
+          api: function(value) {
+            var path = $location.search().path;
+            resetContent({
+              type: 'api',
+              endpointUrl: value,
+              path: path
             });
           }
         };
@@ -170,19 +179,22 @@
           });
         });
       },
-      fadeHint: function() {
-        $location.path('/hint');
-        $timeout(function() {
-          $location.path('/');
-        }, 500);
+      otherBindings: function(scope) {
+        var hackArea = document.getElementById('hack-area');
+        scope.$watch('currentText', function() {
+          hackArea.scrollTop = hackArea.scrollHeight;
+        });
       },
       go: function(scope) {
-        this.fadeHint();
-        this.keyEvents(scope);
-        this.defaults(scope);
-        this.location(scope);
+        for (var prop in this) {
+          if (prop !== 'go') {
+            this[prop](scope);
+          }
+        }
         cursorGo();
       }
-    }.go($scope);
+    };
+    
+    setup.go($scope);
   });
 })();

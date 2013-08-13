@@ -6,7 +6,7 @@
     var sources, sendRequest;
     
     sources = {
-      gist: function(options, callback) {
+      gist: function(options) {
         var url = 'https://api.github.com/gists/' + options.id;
         sendRequest(url, function(data) {
           var fileNumber;
@@ -15,17 +15,29 @@
             fileNumber = angular.isNumber(gistFile) ? gistFile : 0;
             gistFile = Object.keys(data.files)[fileNumber];
           }
-          callback(data.files[gistFile].content);
+          options.callback(data.files[gistFile].content);
         });
       },
-      pastebin: function(options, callback) {
-        var url = 'http://pastebin.com/raw.php?i=' + options.id;
-        sendRequest(url, callback);
-      },
       github: function(options) {
-        var url = 'https://api.github.com/repos/' + options.owner + '/' + options.repo + '/contents' + options.path;
+        var url = 'https://api.github.com/repos/' + options.owner + '/' + options.repo + '/contents/' + options.path;
         sendRequest(url, function(data) {
-          callback(atob(data.content));
+          options.callback(atob(data.content.replace(/\n/g, '')));
+        });
+      },
+      api: function(options) {
+        var url = options.endpointUrl;
+        sendRequest(url, function(data) {
+          if (options.path) {
+            var regex = /\['(.*?)'\]/g;
+            var prop;
+            while (prop = regex.exec(options.path)) {
+              data = data[prop[1]];
+            }
+          }
+          if (angular.isObject(data)) {
+            data = angular.toJson(data, true);
+          }
+          options.callback(data);
         });
       }
     };
@@ -47,7 +59,7 @@
       getContent: function(options) {
         var sourceFunction = sources[options.type];
         if (angular.isFunction(sourceFunction)) {
-          sourceFunction(options, options.callback);
+          sourceFunction(options);
         }
       }
     }

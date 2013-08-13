@@ -5,26 +5,32 @@
     <link rel="stylesheet" href="./styles/style.css">
   </head>
   <body ng-controller="MainCtrl">
+   <div class="hide" dropzone></div> 
     <pre
       id="hack-area"
       ng-cloak
-      iwpm-keypress
-      scroll-glue
-      ng-model="currentText">{{currentText}}<span ng-show="cursorOn">|</span>
+      iwpm-keypress>{{currentText}}<span ng-show="cursorOn">|</span>
     </pre>
-    <div id="settings-overlay" class="overlay" ng-cloak ng-class="{'hide': !showSettings}">
+    <div
+      id="settings-overlay"
+      class="overlay"
+      ng-cloak
+      ng-class="{'hide': !showSettings}">
       <h1>InfiniteWPM.com</h1>
       <p>Press '?' to close/open this menu.</p>
       <h2>About</h2>
       <p>We're under construction. Contact <a href="mailto:kent+dev@doddsfamily.us">Kent</a> with any questions.</p>
       <h2>Settings</h2>
-      <p>Just wait for all kinds of cool stuff. For now, if you want custom text, try <a href="#/?gist=2980444">this</a> and change the gist number to the id of another gist.</p>
+      <p>For now, if you want custom text, try <a href="#/?gist=2980444">this</a> and change the gist number to the id of another gist.</p>
+      <form>
+        Characters Per Keypress: <input type="number" ng-model="charsPerPress" /><br />
+        Repeat Text: <input type="checkbox" ng-model="repeatText" />
+      </form>
     </div>
     <div id="hint-overlay" class="overlay" ng-class="{'hide': !showHint}">
       <h1>Welcome to InfiniteWPM.com</h1>
       <h2>Press '?' for settings...</h2>
     </div>
-    <!-- <div id="dropzone"></div> -->
     <!-- <script src="https://cdn.firebase.com/v0/firebase.js" data-local-src="./vendor/firebase.js" data-prop-name="Firebase"></script> -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" data-prop-name="angular" data-local-src="./vendor/angular.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js" data-local-src="./vendor/jquery.js" data-prop-name="jQuery"></script>
@@ -37,7 +43,7 @@
     <script src="./scripts/values/defaultText.js"></script>
     <script src="./scripts/controllers/MainCtrl.js"></script>
     <script src="./scripts/directives/iwpmKeypress.js"></script>
-    <script src="./scripts/directives/scrollGlue.js"></script>
+    <script src="./scripts/directives/dropzone.js"></script>
     <script src="./scripts/factories/TextSources.js"></script>
   </body>
 </html>
