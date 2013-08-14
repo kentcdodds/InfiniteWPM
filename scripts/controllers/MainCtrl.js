@@ -28,6 +28,14 @@
         scope.cursorOn = true;
         scope.repeatText = true;
         scope.showDropzone = true;
+        scope.resetText = function(newContent) {
+          if (!angular.isString(newContent)) {
+            newContent = angular.toJson(newContent);
+          }
+          scope.allText = newContent;
+          scope.upcomingText = newContent;
+          scope.currentText = '';
+        };
       },
       keyEvents: function(scope) {
         var wildcard = '*';
@@ -101,10 +109,6 @@
           executeKey(event, keys.keyDown);
         };
       },
-      dropEvents: function(scope) {
-        var $dropArea = $('#dropzone');
-
-      },
       location: function(scope) {
         var locations = {
           '/settings': function() {
@@ -121,11 +125,7 @@
         };
         var resetContent = function(options) {
           TextSources.getContent(angular.extend({
-            callback: function(content) {
-              scope.allText = content;
-              scope.upcomingText = content;
-              scope.currentText = '';
-            }
+            callback: scope.resetText
           }, options));
         }
         var queryParams = {
