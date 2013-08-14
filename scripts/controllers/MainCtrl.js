@@ -70,7 +70,7 @@
               return;
             }
             if (scope.repeatText && scope.upcomingText.length < scope.charsPerPress) {
-              scope.upcomingText += scope.allText;
+              scope.upcomingText += '\n' + scope.allText;
             }
             var newOutput = scope.upcomingText.substring(0, scope.charsPerPress);
             scope.upcomingText = scope.upcomingText.substring(scope.charsPerPress);
