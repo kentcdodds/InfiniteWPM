@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="./styles/style.css">
   </head>
   <body ng-controller="MainCtrl">
-   <div class="hide" dropzone>Drop... Anywhere</div> 
     <pre
       id="hack-area"
       ng-cloak
@@ -27,6 +26,7 @@
         Repeat Text: <input type="checkbox" ng-model="repeatText" />
       </form>
     </div>
+   <div class="hide" dropzone>Drop... Anywhere</div> 
     <div id="hint-overlay" class="overlay" ng-class="{'hide': !showHint}">
       <h1>Welcome to InfiniteWPM.com</h1>
       <h2>Press '?' for settings...</h2>

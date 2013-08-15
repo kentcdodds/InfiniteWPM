@@ -26,8 +26,13 @@ body {
   transition: opacity 0.35s ease-in-out;
 }
 
+#settings-overlay:not(.hide) {
+  z-index: 2;
+}
+
 .hide {
   opacity: 0;
+  z-index: -1;
 }
 
 pre {
@@ -52,4 +57,8 @@ pre {
   color: #DFDFDF;
   font-size: 45px;
   z-index: 1;
+}
+
+[dropzone]:not(.hide) {
+  z-index: 3;
 }
