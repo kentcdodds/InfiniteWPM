@@ -29,12 +29,20 @@
         scope.repeatText = true;
         scope.showDropzone = true;
         scope.resetText = function(newContent) {
+          if (newContent === undefined) {
+            newContent = scope.allText;
+          }
           if (!angular.isString(newContent)) {
             newContent = angular.toJson(newContent);
           }
           scope.allText = newContent;
           scope.upcomingText = newContent;
           scope.currentText = '';
+          if ($location.path() === '/settings') {
+            $location.path('/');
+          } else {
+            scope.showSettings = false;
+          }
         };
       },
       keyEvents: function(scope) {
@@ -140,6 +148,7 @@
           github: function(value) {
             var repo = $location.search().repo;
             var owner = $location.search().owner;
+            var ref = $location.search().ref;
             if (!repo || !owner) {
               return; //Can't get anything...
             }
@@ -147,6 +156,7 @@
               type: 'github',
               repo: repo,
               owner: owner,
+              ref: ref,
               path: value
             });
           },

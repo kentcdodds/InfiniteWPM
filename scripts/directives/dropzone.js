@@ -70,9 +70,6 @@ angular.module('iwpm').directive('dropzone', function($location) {
     function gist(url) {
       var specificFileRegex, generalGistRegex, generalGistWithoutUsernameRegex;
       var matchArray;
-      if (url.indexOf('gist.github.com') < 0) {
-        return false;
-      }
       specificFileRegex = /gist\.github\.com\/(.*?)\/(\d+)\/raw\/.*?\/(.*?)$/;
       matchArray = specificFileRegex.exec(url);
       if (matchArray) {
@@ -101,14 +98,38 @@ angular.module('iwpm').directive('dropzone', function($location) {
       return false;
     },
     function github(url) {
-      if (url.indexOf('github.com') < 0) {
-        return false;
+      var githubRegex, githubRawRegex;
+      var matchedArray;
+      githubRawRegex = /raw\.github\.com\/(.*?)\/(.*?)\/(.*?)\/(.*?)$/;
+      matchedArray = githubRawRegex.exec(url);
+      if (matchedArray) {
+        $location.search({
+          github: matchedArray[4],
+          owner: matchedArray[1],
+          repo: matchedArray[2],
+          ref: matchedArray[3]
+        });
+        return true;
       }
-      
-      alert('you dropped a github url!');
-      return true;
+      githubRegex = /github\.com\/(.*?)\/(.*?)\/.*?\/(.*?)\/(.*?)$/;
+      matchedArray = githubRegex.exec(url);
+      if (matchedArray) {
+        $location.search({
+          github: matchedArray[4],
+          owner: matchedArray[1],
+          repo: matchedArray[2],
+          ref: matchedArray[3]
+        });
+        return true;
+      }
+      return false;
     },
     function api(url) {
+      // No need to test if it's a URL because this
+      // function should only be called when it is...
+      $location.search({
+        api: url
+      });
       return true;
     }
   ];
@@ -130,8 +151,8 @@ angular.module('iwpm').directive('dropzone', function($location) {
   
   prepStringForTextReset = function(string, scope) {
     var resolvedUrl = null;
-    if (/^http(s)?:\/\/.*$/.test(string)) {
-      console.log('url dropped');
+    var urlRegex = /^http(s)?:\/\/.*?\..+$/;
+    if (urlRegex.test(string)) {
       for (var i = 0; i < supportedUrls.length; i++) {
         resolvedUrl = supportedUrls[i](string);
         if (resolvedUrl) {

@@ -19,7 +19,11 @@
         });
       },
       github: function(options) {
-        var url = 'https://api.github.com/repos/' + options.owner + '/' + options.repo + '/contents/' + options.path;
+        var url = 'https://api.github.com/repos/' +
+          options.owner + '/' + options.repo +
+          '/contents/' + options.path +
+          (options.ref ? '?ref=' + options.ref : '');
+        
         sendRequest(url, function(data) {
           options.callback(atob(data.content.replace(/\n/g, '')));
         });
