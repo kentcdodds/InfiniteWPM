@@ -24,6 +24,7 @@
         scope.upcomingText = scope.allText;
         scope.charsPerPress = 3;
         scope.showSettings = false;
+        scope.showAbout = false;
         scope.showHint = true;
         scope.cursorOn = true;
         scope.repeatText = true;
@@ -118,16 +119,20 @@
         };
       },
       location: function(scope) {
+        var showOneOverlay = function(name) {
+          scope.showSettings = false;
+          scope.showHint = false;
+          scope.showAbout = false;
+          if (name) {
+            scope['show' + name] = true;
+          }
+        };
         var locations = {
-          '/settings': function() {
-            scope.showSettings = true;
-          },
-          '/hint': function() {
-            scope.showHint = true;
-          },
+          '/settings': 'Settings',
+          '/hint': 'Hint',
+          '/about': 'About',
           '/': function() {
-            scope.showSettings = false;
-            scope.showHint = false;
+            showOneOverlay();
             document.activeElement.blur();
           }
         };
@@ -173,8 +178,14 @@
           return $location.path();
         }, function() {
           var path = $location.path();
-          if (locations[path]) {
-            locations[path]();
+          path = path || '/';
+          var action = locations[path];
+          if (action) {
+            if (angular.isFunction(action)) {
+              action();
+            } else {
+              showOneOverlay(action);
+            }
           }
         });
         scope.$watch(function() {
