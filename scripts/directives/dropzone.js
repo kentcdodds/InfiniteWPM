@@ -1,4 +1,4 @@
-angular.module('iwpm').directive('dropzone', function() {
+angular.module('iwpm').directive('dropzone', function($location) {
   var toggleClass = 'hide', supportedUrls; //hoist-monster
   
   var handleDragEvent, getDataTransferFromEvent,
@@ -68,21 +68,48 @@ angular.module('iwpm').directive('dropzone', function() {
 
   supportedUrls = [
     function gist(url) {
+      var specificFileRegex, generalGistRegex, generalGistWithoutUsernameRegex;
+      var matchArray;
       if (url.indexOf('gist.github.com') < 0) {
-        return null;
+        return false;
       }
-      alert('you dropped a gist!');
-      return url;
+      specificFileRegex = /gist\.github\.com\/(.*?)\/(\d+)\/raw\/.*?\/(.*?)$/;
+      matchArray = specificFileRegex.exec(url);
+      if (matchArray) {
+        $location.search({
+          gist: matchArray[2],
+          file: matchArray[3]
+        });
+        return true;
+      }
+      generalGistRegex = /gist\.github\.com\/(.*?)\/(\d+)$/;
+      matchArray = generalGistRegex.exec(url);
+      if (matchArray) {
+        $location.search({
+          gist: matchArray[2]
+        });
+        return true;
+      }
+      generalGistWithoutUsernameRegex = /gist\.github\.com\/(\d+)$/;
+      matchArray = generalGistWithoutUsernameRegex.exec(url);
+      if (matchArray) {
+        $location.search({
+          gist: matchArray[1]
+        });
+        return true;
+      }
+      return false;
     },
     function github(url) {
       if (url.indexOf('github.com') < 0) {
-        return null;
+        return false;
       }
+      
       alert('you dropped a github url!');
-      return url;
+      return true;
     },
     function api(url) {
-      return url;
+      return true;
     }
   ];
   
@@ -108,8 +135,7 @@ angular.module('iwpm').directive('dropzone', function() {
       for (var i = 0; i < supportedUrls.length; i++) {
         resolvedUrl = supportedUrls[i](string);
         if (resolvedUrl) {
-          string = resolvedUrl;
-          break;
+          return;
         }
       }
     }
