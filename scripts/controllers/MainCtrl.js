@@ -2,7 +2,7 @@
 (function() {
   var app = angular.module('iwpm');
 
-  app.controller('MainCtrl', function($scope, defaultText, $location, TextSources, $timeout) {
+  app.controller('MainCtrl', function($scope, $location, TextSources, $timeout) {
     
     var cursorGo = (function() {
       var timeout;
@@ -20,8 +20,10 @@
     var setup = {
       defaults: function(scope) {
         scope.currentText = '';
-        scope.allText = defaultText;
-        scope.upcomingText = scope.allText;
+        $.get('./resources/defaultText.txt', function(data) {
+          scope.allText = data;
+          scope.upcomingText = data;
+        });
         scope.charsPerPress = 3;
         scope.showSettings = false;
         scope.showAbout = false;
