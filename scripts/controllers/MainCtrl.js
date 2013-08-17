@@ -19,10 +19,10 @@
     
     var setup = {
       defaults: function(scope) {
-        scope.currentText = '';
         $.get('./resources/defaultText.txt', function(data) {
-          scope.allText = data;
-          scope.upcomingText = data;
+          scope.resetText(data);
+        }).fail(function() {
+          scope.resetText('The Default Text had trouble loading!!!');
         });
         scope.charsPerPress = 3;
         scope.showSettings = false;
@@ -207,6 +207,9 @@
         scope.$watch('currentText', function() {
           hackArea.scrollTop = hackArea.scrollHeight;
         });
+        hackArea.addEventListener('click', function() {
+          $('body').focus();
+        }, false);
       },
       go: function(scope) {
         for (var prop in this) {

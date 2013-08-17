@@ -56,7 +56,7 @@ pre {
   line-height: 200px;
   color: #DFDFDF;
   font-size: 45px;
-  z-index: 1;
+  z-index: 0;
 }
 
 [dropzone]:not(.hide) {
