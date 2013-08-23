@@ -10,20 +10,24 @@
       ng-cloak
       iwpm-keypress>{{currentText}}<span ng-show="cursorOn">|</span>
     </pre>
-    <div
-      id="settings-overlay"
-      class="overlay"
-      ng-cloak
-      ng-class="{'hide': !showAbout}">
+
+    <div id="hint-overlay" class="overlay" ng-class="{'hide': !showHint}">
+      <h1>Welcome to InfiniteWPM.com</h1>
+      <h2>Press '?' for settings...</h2>
+    </div>
+
+    <div class="overlay hide" ng-class="{'hide': !showAbout}">
       <h1>InfiniteWPM.com</h1>
       <h2>About</h2>
       <p>We're under construction. Contact <a href="mailto:kent+dev@doddsfamily.us">Kent</a> with any questions.</p>
       <a href="#">Close</a>
     </div>
-    <div class="overlay" ng-cloak ng-class="{'hide': !showSettings}">
+
+    <div class="overlay hide" ng-class="{'hide': !showSettings}">
       <h1>Settings</h1>
       <p>Press '?' to close/open this menu.</p>
-      <a href="#/about">About InfiniteWPM.com</a>
+      <div>Click <a href="#/about">here</a> for information about InfiniteWPM.com</div>
+      <div>Choose from a <a href="#/defaults">list</a> of code defaults.</div>
       <h2>Controls</h2>
       <form>
         Characters Per Keypress: <input type="number" ng-model="charsPerPress" /><br />
@@ -33,20 +37,29 @@
       <h2>Defaults</h2>
       <a href="#">Close</a>
     </div>
-    <div class="hide" dropzone>Drop... Anywhere</div> 
-    <div id="hint-overlay" class="overlay" ng-class="{'hide': !showHint}">
-      <h1>Welcome to InfiniteWPM.com</h1>
-      <h2>Press '?' for settings...</h2>
+
+    <div class="overlay hide" ng-class="{'hide': !showDefaults}">
+      <h1>Defaults</h1>
+      <ul>
+        <li ng-repeat="source in defaultCodeSources">
+          <a ng-href="#/?gist=6257506&file={{source.name + '.' + source.extension}}">{{source.name}}</a><span ng-show="defaultCodeSources[key].length > 0">:</span>
+          <ul ng-show="source.areas">
+            <li ng-repeat="(key, value) in source.areas">
+              <a ng-href="#/?gist=6257506&file={{source.name + '_' + value}}">{{key}}</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <a href="#">Close</a>
     </div>
+
+    <div class="hide" dropzone>Drop... Anywhere</div> 
     <!-- <script src="https://cdn.firebase.com/v0/firebase.js" data-local-src="./vendor/firebase.js" data-prop-name="Firebase"></script> -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" data-prop-name="angular" data-local-src="./vendor/angular.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js" data-local-src="./vendor/jquery.js" data-prop-name="jQuery"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js" data-prop-name="jQuery" data-local-src="./vendor/jquery.js"></script>
     <script src="./vendor/dt-script-loader.min.js"></script>
-    <script src="./vendor/angular-cookies.js"></script>
     <!-- <script src="./vendor/angularfire.js"></script> -->
 
-    <script src="./scripts/other.js"></script>
-    
     <script src="./scripts/app.js"></script>
     <script src="./scripts/controllers/MainCtrl.js"></script>
     <script src="./scripts/directives/iwpmKeypress.js"></script>

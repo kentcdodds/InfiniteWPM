@@ -1,7 +1,4 @@
-angular.module('iwpm').directive('iwpmKeypress', function($document) {
-  var keys = {
-    backspace: 8
-  }
+angular.module('iwpm').directive('iwpmKeypress', function() {
   return {
     restrict: 'EA',
     replace: true,

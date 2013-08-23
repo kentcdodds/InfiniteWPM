@@ -20,18 +20,155 @@
     var setup = {
       defaults: function(scope) {
         $.get('./resources/defaultText.txt', function(data) {
-          scope.resetText(data);
+          scope.resetText(data, true);
         }).fail(function() {
-          scope.resetText('The Default Text had trouble loading!!!');
+          scope.resetText('The Default Text had trouble loading!!!', true);
         });
+        
+        scope.defaultCodeSources = [
+          {
+            name: 'JavaScript',
+            extension: 'js',
+            areas: {
+              AngularJS: 'AngularJS.js',
+              NodeJS: 'NodeJS.js',
+              Dart: 'Dart.js',
+              Meteor: 'Meteor.js'
+            }
+          },
+          {
+            name: 'HTML',
+            extension: 'html',
+            areas: {
+              Handlebars: 'Handlebars.handlebars',
+              AngularJS: 'AngularJS.html',
+              Jade: 'Jade.jade'
+            }
+          },
+          {
+            name: 'CSS',
+            extension: 'css',
+            areas: {
+              SCSS: 'SCSS.scss',
+              SASS: 'SASS.sass',
+              Less: 'Less.less'
+            }
+          },
+          {
+            name: 'Java',
+            extension: 'java',
+            areas: {
+              Spring: 'Spring.java',
+              Android: 'Android.java'
+            }
+          },
+          {
+            name: 'Objective-C',
+            extension: 'm',
+            areas: {
+              iOS: 'iOS.m',
+              'OS X': 'OS X.m'
+            }
+          },
+          {
+            name: 'PHP',
+            extension: 'php',
+            areas: {
+              Yii: 'Yii.php'
+            }
+          },
+          {
+            name: 'Ruby',
+            extension: 'rb',
+            areas: {
+              Rails: 'Rails.rb'
+            }
+          },
+          {
+            name: 'Scala',
+            extension: 'scala',
+            areas: {
+              Lift: 'Lift.scala'
+            }
+          },
+          {
+            name: 'SQL',
+            extension: 'sql',
+            areas: {
+              PLSQL: 'PLSQL.pls'
+            }
+          },
+          {
+            name: 'C#',
+            extension: 'cs',
+            areas: {
+              '.NET': '.NET.cs'
+            }
+          },
+          {
+            name: 'Python',
+            extension: '.py',
+            areas: {
+              DJango: 'DJango.py'
+            }
+          },
+          {
+            name: 'Shell',
+            extension: 'sh'
+          },
+          {
+            name: 'C',
+            extension: 'c'
+          },
+          {
+            name: 'C++',
+            extension: 'cpp'
+          },
+          {
+            name: 'Assembly',
+            extension: 'asm'
+          },
+          {
+            name: 'Machine',
+            extension: ''
+          },
+          {
+            name: 'Pascal',
+            extension: 'pas'
+          },
+          {
+            name: 'Perl',
+            extension: 'pl'
+          },
+          {
+            name: 'Visual Basic',
+            extension: 'vb'
+          },
+          {
+            name: 'Cobol',
+            extension: 'cbl'
+          },
+          {
+            name: 'Fortran',
+            extension: 'for'
+          },
+          {
+            name: 'Haskell',
+            extension: 'hs'
+          }
+        ];
+        
         scope.charsPerPress = 3;
+        scope.repeatText = true;
+        
         scope.showSettings = false;
         scope.showAbout = false;
         scope.showHint = true;
+        scope.showDefaults = true;
+        
         scope.cursorOn = true;
-        scope.repeatText = true;
         scope.showDropzone = true;
-        scope.resetText = function(newContent) {
+        scope.resetText = function(newContent, noRedirect) {
           if (newContent === undefined) {
             newContent = scope.allText;
           }
@@ -41,10 +178,8 @@
           scope.allText = newContent;
           scope.upcomingText = newContent;
           scope.currentText = '';
-          if ($location.path() === '/settings') {
+          if (!noRedirect) {
             $location.path('/');
-          } else {
-            scope.showSettings = false;
           }
         };
       },
@@ -54,6 +189,7 @@
         var keys = (function() {
           var keyDown = {};
           var keyPressed = {};
+          var keyUp = {};
           var charCode = function(character) {
             return character.charCodeAt(0);
           };
@@ -61,7 +197,8 @@
             return !scope.showSettings;
           };
           var otherKeys = {
-            backspace: '8'
+            backspace: '8',
+            escape: '27'
           };
 
           keyDown[otherKeys.backspace] = function(event) {
@@ -96,6 +233,10 @@
             }
             event.preventDefault();
           };
+          
+          keyDown[otherKeys.escape] = function(event) {
+            $location.path('/');
+          };
 
           return {
             keyDown: keyDown,
@@ -119,12 +260,17 @@
         scope.keyDown = function(event) {
           executeKey(event, keys.keyDown);
         };
+        
+        scope.keyUp = function(event) {
+          executeKey(event, keys.keyUp);
+        }
       },
       location: function(scope) {
         var showOneOverlay = function(name) {
           scope.showSettings = false;
           scope.showHint = false;
           scope.showAbout = false;
+          scope.showDefaults = false;
           if (name) {
             scope['show' + name] = true;
           }
@@ -133,6 +279,7 @@
           '/settings': 'Settings',
           '/hint': 'Hint',
           '/about': 'About',
+          '/defaults': 'Defaults',
           '/': function() {
             showOneOverlay();
             document.activeElement.blur();

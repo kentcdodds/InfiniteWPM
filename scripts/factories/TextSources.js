@@ -2,7 +2,7 @@
 (function() {
   var app = angular.module('iwpm');
   
-  app.factory('TextSources', function($http, $rootScope) {
+  app.factory('TextSources', function($http) {
     var sources, sendRequest;
     
     sources = {
