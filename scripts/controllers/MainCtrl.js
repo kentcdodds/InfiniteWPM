@@ -2,7 +2,7 @@
 (function() {
   var app = angular.module('iwpm');
 
-  app.controller('MainCtrl', function($scope, $location, TextSources, $timeout) {
+  app.controller('MainCtrl', function($scope, $location, TextSources, $timeout, angularFire) {
     
     var cursorGo = (function() {
       var timeout;
@@ -24,139 +24,11 @@
         }).fail(function() {
           scope.resetText('The Default Text had trouble loading!!!', true);
         });
+
+        $scope.crowdCodeSources = [];
         
-        scope.defaultCodeSources = [
-          {
-            name: 'JavaScript',
-            extension: 'js',
-            areas: {
-              AngularJS: 'AngularJS.js',
-              NodeJS: 'NodeJS.js',
-              Dart: 'Dart.js',
-              Meteor: 'Meteor.js'
-            }
-          },
-          {
-            name: 'HTML',
-            extension: 'html',
-            areas: {
-              Handlebars: 'Handlebars.handlebars',
-              AngularJS: 'AngularJS.html',
-              Jade: 'Jade.jade'
-            }
-          },
-          {
-            name: 'CSS',
-            extension: 'css',
-            areas: {
-              SCSS: 'SCSS.scss',
-              SASS: 'SASS.sass',
-              Less: 'Less.less'
-            }
-          },
-          {
-            name: 'Java',
-            extension: 'java',
-            areas: {
-              Spring: 'Spring.java',
-              Android: 'Android.java'
-            }
-          },
-          {
-            name: 'Objective-C',
-            extension: 'm',
-            areas: {
-              iOS: 'iOS.m',
-              'OS X': 'OS X.m'
-            }
-          },
-          {
-            name: 'PHP',
-            extension: 'php',
-            areas: {
-              Yii: 'Yii.php'
-            }
-          },
-          {
-            name: 'Ruby',
-            extension: 'rb',
-            areas: {
-              Rails: 'Rails.rb'
-            }
-          },
-          {
-            name: 'Scala',
-            extension: 'scala',
-            areas: {
-              Lift: 'Lift.scala'
-            }
-          },
-          {
-            name: 'SQL',
-            extension: 'sql',
-            areas: {
-              PLSQL: 'PLSQL.pls'
-            }
-          },
-          {
-            name: 'C#',
-            extension: 'cs',
-            areas: {
-              '.NET': '.NET.cs'
-            }
-          },
-          {
-            name: 'Python',
-            extension: '.py',
-            areas: {
-              DJango: 'DJango.py'
-            }
-          },
-          {
-            name: 'Shell',
-            extension: 'sh'
-          },
-          {
-            name: 'C',
-            extension: 'c'
-          },
-          {
-            name: 'C++',
-            extension: 'cpp'
-          },
-          {
-            name: 'Assembly',
-            extension: 'asm'
-          },
-          {
-            name: 'Machine',
-            extension: ''
-          },
-          {
-            name: 'Pascal',
-            extension: 'pas'
-          },
-          {
-            name: 'Perl',
-            extension: 'pl'
-          },
-          {
-            name: 'Visual Basic',
-            extension: 'vb'
-          },
-          {
-            name: 'Cobol',
-            extension: 'cbl'
-          },
-          {
-            name: 'Fortran',
-            extension: 'for'
-          },
-          {
-            name: 'Haskell',
-            extension: 'hs'
-          }
-        ];
+        var ref = new Firebase('http://infinite-wpm.firebaseIO.com/');
+        angularFire(ref, $scope, 'crowdCodeSources');
         
         scope.charsPerPress = 3;
         scope.repeatText = true;
@@ -183,6 +55,21 @@
           }
         };
       },
+      crowdCode: function(scope) {
+        scope.addCrowedCode = function() {
+          if (scope.crowdName && scope.crowdCode) {
+            scope.crowdCodeSources.push({
+              name: scope.crowdName,
+              code: scope.crowdCode
+            });
+            scope.crowdName = '';
+            scope.crowdCode = '';
+          }
+        }
+        scope.removeSource = function(index) {
+          scope.crowdCodeSources.splice(index, 1);
+        }
+      },
       keyEvents: function(scope) {
         var wildcard = '*';
         var executeKey;
@@ -194,7 +81,7 @@
             return character.charCodeAt(0);
           };
           var canType = function() {
-            return !scope.showSettings;
+            return !scope.showSettings && !scope.showDefaults;
           };
           var otherKeys = {
             backspace: '8',

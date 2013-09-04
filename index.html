@@ -40,25 +40,29 @@
 
     <div class="overlay hide" ng-class="{'hide': !showDefaults}">
       <h1>Defaults</h1>
+      <button ng-click="showCrowdCodeSubmissionForm=!showCrowdCodeSubmissionForm">Submit Your own...</button>
+      <div ng-show="showCrowdCodeSubmissionForm">
+        <label>Code Name</label><input ng-model="crowdName"  type="text" /><br />
+        <label>Code Source</label><textarea ng-model="crowdCode"></textarea><br />
+        <button ng-click="addCrowedCode()">Add code!</button>
+      </div>
       <ul>
-        <li ng-repeat="source in defaultCodeSources">
-          <a ng-href="#/?gist=6257506&file={{source.name + '.' + source.extension}}">{{source.name}}</a><span ng-show="defaultCodeSources[key].length > 0">:</span>
-          <ul ng-show="source.areas">
-            <li ng-repeat="(key, value) in source.areas">
-              <a ng-href="#/?gist=6257506&file={{source.name + '_' + value}}">{{key}}</a>
-            </li>
-          </ul>
+        <li ng-repeat="source in crowdCodeSources | orderBy:source.votes:true">
+          <button ng-click="resetText(source.code)">{{source.name}}</button> | {{source.votes}}
+          | <button ng-click="source.votes = source.votes + 1">Up-vote</button>
+          | <button ng-click="source.votes = source.votes - 1">Down-vote</button>
+          | <button ng-click="removeSource($index)">Delete</button>
         </li>
       </ul>
       <a href="#">Close</a>
     </div>
 
-    <div class="hide" dropzone>Drop... Anywhere</div> 
-    <!-- <script src="https://cdn.firebase.com/v0/firebase.js" data-local-src="./vendor/firebase.js" data-prop-name="Firebase"></script> -->
+    <div class="hide" dropzone>Drop... Anywhere</div>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" data-prop-name="angular" data-local-src="./vendor/angular.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js" data-prop-name="jQuery" data-local-src="./vendor/jquery.js"></script>
     <script src="./vendor/dt-script-loader.min.js"></script>
-    <!-- <script src="./vendor/angularfire.js"></script> -->
+    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/0.3.0/angularfire.min.js"></script>
 
     <script src="./scripts/app.js"></script>
     <script src="./scripts/controllers/MainCtrl.js"></script>
