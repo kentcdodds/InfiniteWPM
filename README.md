@@ -12,3 +12,7 @@ I'm making a page for default code snippets people can choose from. But I don't 
 ![Detective Joe](https://raw.github.com/kentcdodds/InfiniteWPM/master/resources/DetectiveJoe.jpg)
 
 If you're interested in helping with the search, please see [issue #5](https://github.com/kentcdodds/InfiniteWPM/issues/5)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kentcdodds/infinitewpm/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
